@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para la Mija 🦦💛</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif;}
+
+body{
+overflow:hidden;
+height:100vh;
+background: linear-gradient(135deg,#ffd6e8,#ffe9c9,#d0f4ff);
+display:flex;
+justify-content:center;
+align-items:center;
+text-align:center;
+color:#5a4a4a;
+}
+
+/* TARJETA INICIO */
+#inicio{
+background:white;
+padding:40px;
+border-radius:25px;
+box-shadow:0 10px 30px rgba(0,0,0,0.15);
+animation:flotar 3s ease-in-out infinite alternate;
+}
+
+@keyframes flotar{
+from{transform:translateY(0px);}
+to{transform:translateY(-10px);}
+}
+
+h1{
+margin-bottom:10px;
+font-size:28px;
+}
+
+.sub{
+font-size:14px;
+margin-bottom:20px;
+opacity:0.7;
+}
+
+button{
+padding:12px 25px;
+border:none;
+border-radius:25px;
+background:#ff8fab;
+color:white;
+font-size:16px;
+cursor:pointer;
+transition:.3s;
+}
+
+button:hover{
+transform:scale(1.1);
+background:#ff5d8f;
+}
+
+select{
+margin-bottom:15px;
+padding:6px;
+border-radius:20px;
+border:1px solid #ddd;
+}
+
+/* PANEL */
+#panel{
+position:fixed;
+top:10px;
+left:10px;
+background:rgba(255,255,255,0.8);
+padding:8px 15px;
+border-radius:20px;
+font-size:14px;
+display:none;
+}
+
+/* OBJETOS */
+.objeto{
+position:absolute;
+font-size:40px;
+cursor:pointer;
+animation:subir linear forwards;
+}
+
+@keyframes subir{
+from{transform:translateY(100vh);}
+to{transform:translateY(-80px);}
+}
+
+/* FINAL */
+#final{
+display:none;
+background:white;
+padding:30px;
+border-radius:20px;
+max-width:500px;
+box-shadow:0 10px 30px rgba(0,0,0,0.2);
+animation:aparecer 1s ease forwards;
+}
+
+@keyframes aparecer{
+from{opacity:0;transform:scale(.8);}
+to{opacity:1;transform:scale(1);}
+}
+
+.confeti{
+position:absolute;
+width:8px;
+height:8px;
+animation:caer 4s linear infinite;
+}
+
+@keyframes caer{
+from{transform:translateY(-10px);}
+to{transform:translateY(100vh);}
+}
+</style>
+</head>
+
+<body>
+
+<div id="inicio">
+<h1>🦦 Juego de Cumpleaños Leydi💛</h1>
+<div class="sub">Hecho con cariño para la mija :3</div>
+
+<select id="dificultad">
+<option value="facil">Tranquilito </option>
+<option value="medio">Normalito </option>
+<option value="dificil">NOSE xd</option>
+</select><br>
+
+<button onclick="empezarJuego()">Empezar</button>
+</div>
+
+<div id="panel">
+Puntos: <span id="puntos">0</span> |
+❤️ <span id="vidas">3</span>
+</div>
+
+<div id="final">
+<h2>🎉 ¡Feliz Cumpleaños Leydi! 🎂</h2>
+<p style="margin-top:15px;font-size:14px;line-height:1.6;">
+Para empezar quiero decir que este pequeño juego es simple… pero lo hice por que cosas asi te hago :3<br><br>
+Como es normal cumples un año más de vida, un año más donde crecerás y lograrás cosas bonitas.<br>
+Te deseo lo mejor en todo lo que hagas tanto como personal y profesional<br><br>
+Aveces no coincidiremos o pensaremos distinto, pero eso no quita lo mucho que te aprecio.<br>
+Quiero que sepas que el tiempo que llevo conociendote es uno de las mejores suerte que tuve<br>
+Esto lo digo por aqui por que aveces no me se expresar pipipi<br>
+Y para terminar que hoy la pases increíble, que te consientan mucho y que no te falte nada de lo que te hace feliz.
+PD: Lo iba a hacer mejor pero la chamba me consume XD.
+</p>
+<br>
+<h3 id="resultado"></h3>
+<br>
+<button onclick="location.reload()">Volver a jugar</button>
+</div>
+
+<audio id="musica" loop>
+<source src="Saint Motel - Cold Cold Man.mp3.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+let puntos=0;
+let vidas=3;
+let velocidad=6000; // MAS LENTO
+let frecuencia=1200; // MENOS OBJETOS
+let juegoActivo=false;
+let intervalo;
+
+function empezarJuego(){
+
+let nivel=document.getElementById("dificultad").value;
+
+if(nivel==="facil"){velocidad=7000;frecuencia=1400;}
+if(nivel==="medio"){velocidad=6000;frecuencia=1200;}
+if(nivel==="dificil"){velocidad=4500;frecuencia=900;}
+
+document.getElementById("inicio").style.display="none";
+document.getElementById("panel").style.display="block";
+let musica = document.getElementById("musica");
+musica.currentTime = 26; // empieza en el segundo 40 (cámbialo si quieres)
+musica.volume = 0.4;
+musica.play().catch(()=>{});
+
+juegoActivo=true;
+intervalo=setInterval(crearObjeto,frecuencia);
+}
+
+function crearObjeto(){
+if(!juegoActivo) return;
+
+let obj=document.createElement("div");
+obj.classList.add("objeto");
+let emojis=["🦦","🎈","🎁","🌸","💛"];
+obj.innerHTML=emojis[Math.floor(Math.random()*emojis.length)];
+obj.style.left=Math.random()*90+"vw";
+obj.style.animationDuration=velocidad+"ms";
+
+obj.onclick=function(){
+puntos++;
+document.getElementById("puntos").innerText=puntos;
+obj.remove();
+if(puntos>=10) terminarJuego();
+}
+
+document.body.appendChild(obj);
+
+setTimeout(()=>{
+if(obj.parentNode){
+obj.remove();
+vidas--;
+document.getElementById("vidas").innerText=vidas;
+if(vidas<=0) terminarJuego();
+}
+},velocidad);
+}
+
+function terminarJuego(){
+juegoActivo=false;
+clearInterval(intervalo);
+document.querySelectorAll(".objeto").forEach(o=>o.remove());
+document.getElementById("panel").style.display="none";
+document.getElementById("final").style.display="block";
+document.getElementById("resultado").innerText="Tu puntuación fue: "+puntos;
+lanzarConfeti();
+}
+
+function lanzarConfeti(){
+for(let i=0;i<150;i++){
+let c=document.createElement("div");
+c.classList.add("confeti");
+c.style.left=Math.random()*100+"vw";
+c.style.background=["#ffcad4","#caffbf","#9bf6ff","#ffd6a5"][Math.floor(Math.random()*4)];
+c.style.animationDuration=(Math.random()*3+2)+"s";
+document.body.appendChild(c);
+}
+}
+</script>
+
+</body>
+</html>
